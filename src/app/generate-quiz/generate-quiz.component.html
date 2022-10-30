@@ -1,0 +1,33 @@
+<form class="example-form" #f="ngForm" (ngSubmit)="submitQuiz(f.value); showSuccess()">
+    <mat-form-field class="example-form-field">
+    <input matInput required ngModel name ="quizTitle" #quizTitle="ngModel" placeholder="Quiz Title" type="text">
+    </mat-form-field>
+    <mat-form-field class="example-form-field">
+    <input matInput required ngModel name ="quizDescription" #quizDescription="ngModel" placeholder="Quiz Description" type="text">
+    </mat-form-field>
+    <mat-checkbox ngModel name ="timeBased" #timeBased="ngModel" (change)="onTimeInputChange()">Time-Based?</mat-checkbox>
+    <div *ngIf="timeChange">
+        <mat-form-field class="example-form-field">
+        <label for="timeLimit">Enter the time limit of quiz(minutes)</label>
+        <input matInput required ngModel name ="timeLimit" #timeLimit="ngModel" type="number" min="1">
+        </mat-form-field>
+    </div>
+    <mat-form-field class="example-form-field">
+      <input matInput required ngModel name ="amount" #amount="ngModel" placeholder="Number of questions" type="number" min="1">
+    </mat-form-field>
+    <div>
+        <mat-form-field>
+          <mat-select placeholder="Select category of quiz" ngModel name ="category" #category="ngModel" required>  
+            <mat-option *ngFor="let category of categories" [value]="category.id">{{category.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+    </div>
+    <div>
+        <mat-form-field>
+            <mat-select placeholder="Select type of difficulty" ngModel name ="difficulty" #difficulty="ngModel" required>
+                <mat-option *ngFor="let d of difficulties" [value]="d.value">{{d.name}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <button class="btn btn-primary" [disabled]="f.invalid">Generate Quiz</button>
+</form>
