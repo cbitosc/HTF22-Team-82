@@ -1,0 +1,20 @@
+<mat-toolbar color="primary">
+        <mat-toolbar-row>
+          <span class="title">Quiz Application</span>
+          <span class="example-spacer"></span>
+          <a [routerLink]="['/']">
+            <mat-icon class="example-icon">home</mat-icon>
+          </a>
+          <a [routerLink]="['/login']">
+            <mat-icon class="example-icon">power_settings_new</mat-icon>
+          </a>
+          <a [routerLink]="['/profile']">
+            <mat-icon class="example-icon">account_circle</mat-icon>
+          </a>
+        </mat-toolbar-row>
+</mat-toolbar>
+<!-- <div *ngIf="check(); then sidebar"></div>
+  <ng-template #sidebar>
+    <app-navigation></app-navigation>
+  </ng-template> -->
+<router-outlet></router-outlet>
