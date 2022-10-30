@@ -1,0 +1,20 @@
+<h2 class="text-center">{{currentResult.quizTitle}}</h2>
+<h4 class="text-center">Your Score: {{currentResult.score}}/{{currentResult.answers.length}}</h4>
+<div *ngFor="let answer of currentResult.answers">
+  <input class="form-control" type="text" [disabled]="true" [value] = answer.quesName >
+  <div *ngIf="answer.rightAnswer === answer.selectedAnswer">
+    <div class="alert alert-success">
+    <p>Selected Answer : {{answer.selectedAnswer}}</p>
+    <p>Right Answer : {{answer.rightAnswer}}</p>
+    </div>
+  </div>
+  <div *ngIf="answer.rightAnswer !== answer.selectedAnswer">
+    <div class="alert alert-danger">
+      <p>Selected Answer : {{answer.selectedAnswer}}</p>
+      <p>Right Answer : {{answer.rightAnswer}}</p>
+      <p>Explanation: {{answer.explanation}}</p>
+    </div>
+  </div>
+</div>
+
+<button class="btn btn-primary" (click)="backToHome()">Back</button>
