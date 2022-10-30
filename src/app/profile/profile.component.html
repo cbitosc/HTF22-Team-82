@@ -1,0 +1,63 @@
+<div class="text-center">
+  <mat-icon>user</mat-icon>
+  <h4>Username : {{currentUser.username}}</h4>
+</div>
+<div *ngIf="currentUser.playerOrQm === 'Player'" class="mat-elevation-z5">
+<table class="table table-bordered">
+  <thead class="p-3 mb-2 bg-primary text-white">
+    <tr>
+      <th scope="col">Quiz Attempted</th>
+      <th scope="col">Date</th>
+      <th scope="col">Score</th>
+      <th scope="col">View</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor = "let score of playerScores">
+      <td>{{score.quizTitle}}</td>
+      <td>{{score.attemptedAt | customDate}}</td>
+      <td>{{score.score}}/{{score.answers.length}}</td>
+      <td><a [routerLink]="['/quiz/',score.quizTitle,'/score']">
+        View Score
+      </a>
+    </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div *ngIf="currentUser.playerOrQm === 'Player'">
+  <google-chart [type]="'ColumnChart'" [data]="playerData" [columnNames]="myColumnNames" [title]="'Performance'" [width]="700" [height]="500"></google-chart>
+</div>
+<div *ngIf="currentUser.playerOrQm === 'QuizMaster'"  class="mat-elevation-z5">
+<table class="table table-bordered">
+    <thead class="p-3 mb-2 bg-primary text-white">
+      <tr>
+        <th scope="col">Quiz Created</th>
+        <th scope="col">Date</th>
+        <th scope="col">Popularity</th>
+        <th scope="col">Edit</th>
+        <th scope="col">Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor = "let quiz of quizCreated">
+          <td>{{quiz.name}}</td>
+          <td>{{quiz.createdOn | customDate}}</td>
+          <td>{{quiz.popularity}}</td>
+          <td>
+            <button class="btn btn-info" (click)="editQuiz(quiz.name)">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </td>
+          <td>
+            <button class="btn btn-danger" (click)="deleteQuiz(quiz)">
+              <mat-icon>delete</mat-icon>
+            </button>
+        </td>
+        </tr>
+    </tbody>
+</table>
+</div>
+<div *ngIf="currentUser.playerOrQm === 'QuizMaster'">
+  <google-chart [type]="'BarChart'" [data]="masterData" [columnNames]="quizColumnNames" [title]="'My Quizzes'" [width]="700" [height]="500"></google-chart>
+</div> 
