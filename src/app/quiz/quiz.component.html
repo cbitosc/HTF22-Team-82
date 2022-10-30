@@ -1,0 +1,38 @@
+<div class="timer" *ngIf="isQuizStarted"><strong>{{timeLeft}}</strong> Seconds Left..
+  <mat-icon>timer</mat-icon>
+</div>
+<h2>{{quiz.name}}</h2>
+<h5>{{quiz.description}}</h5>
+<button class="btn btn-primary" *ngIf="!isQuizStarted" (click)="backToHome()">Back</button>&nbsp;&nbsp;
+<button class="btn btn-primary" *ngIf="!isQuizStarted" (click)="loadQuiz(); startTimer(quiz.time*60)">Start Quiz</button>
+
+<form class="form" *ngIf="isQuizStarted" #f="ngForm" (ngSubmit)="onSubmit(f.value); showSuccess()">
+    <div *ngFor="let q of quiz.questions" class="form-group" value ="q.id" >
+        <div *ngIf="q.questionTypeId === 1">
+            <mat-card class="questionCard">
+              <mat-card-subtitle class="questionName"><label for="mcq"><strong>{{q.name}}</strong></label></mat-card-subtitle>
+              <mat-card-content>
+                <div *ngFor="let option of q.options; let i = index">
+                  <input required ngModel name="question[{{q.id}}]" #question = "ngModel" [value]="option.name" type="radio">
+                    {{option.name}}
+                </div>
+              </mat-card-content>
+              </mat-card>
+          </div>
+          <div *ngIf="q.questionTypeId === 2">
+              <mat-card class="questionCard">
+                <mat-card-subtitle class="questionName"><label for="value"><strong>{{q.name}}</strong> </label></mat-card-subtitle>
+                <mat-card-content>
+                <div>
+                  <input required ngModel name = "question[{{q.id}}]" #value = "ngModel" type="text" class="form-control">
+                </div>
+                <div *ngIf="value.touched && value.invalid" class="alert alert-danger">
+                  Required
+                </div>
+                </mat-card-content>
+              </mat-card>
+          </div>              
+    </div>
+  <br><br>
+  <button class="btn btn-primary" *ngIf="isQuizStarted" [disabled]="f.invalid" >Submit</button>
+</form>
