@@ -1,0 +1,14 @@
+.form-group{
+    display: flex;
+    height: 150px;
+}
+.questionCard{
+    height: 180px;
+    width: 1500px;
+}
+.form{
+    padding: 20px;
+}
+.mat-mini-fab{
+    float: right;
+}
