@@ -1,0 +1,130 @@
+<form class="example-form" #f="ngForm" (ngSubmit)="submitQuiz(f.value); showSuccess()">
+    <mat-form-field class="example-form-field">
+    <input matInput required ngModel name ="quizTitle" #quizTitle="ngModel" placeholder="Quiz Title" type="text">
+    </mat-form-field>
+    <mat-form-field class="example-form-field">
+    <input matInput required ngModel name ="quizDescription" #quizDescription="ngModel" placeholder="Quiz Description" type="text">
+    </mat-form-field>
+    <mat-checkbox ngModel name ="timeBased" #timeBased="ngModel" (change)="onTimeInputChange()">Time-Based?</mat-checkbox>
+    <div *ngIf="timeChange">
+        <mat-form-field class="example-form-field">
+        <label for="timeLimit">Enter the time limit of quiz(minutes)</label>
+        <input matInput required ngModel name ="timeLimit" #timeLimit="ngModel" type="number" min="1">
+        </mat-form-field>
+    </div>
+    <div class="form-group">
+        <span *ngIf="!hideAddBtn">
+            <button class="fab-container" mat-fab color="primary" (click)="addQuestion()">
+                <mat-icon>add</mat-icon>
+            </button>
+        </span>
+        <div *ngIf="createQuestion">
+            <div>
+                <mat-form-field>
+                    <mat-select placeholder="Select type of question" ngModel name ="questionType" #questionType="ngModel" required (selectionChange)="selectQuestionChangeHandler($event)">
+                        <mat-option>Select Type</mat-option>
+                        <mat-option value="mcq">MCQ</mat-option>
+                        <mat-option value="value">Value-Based</mat-option>
+                        <mat-option value="nested">Nested</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="questionType.invalid">Please select a question type</mat-error>
+                </mat-form-field>
+            </div>
+            <div *ngIf="selectedQuestionType === 'mcq'">
+                <form #fmcq="ngForm" (ngSubmit)="submitMcqQuestion(fmcq.value)">
+                <br>
+                <mat-form-field class="example-form-field">
+                <input matInput ngModel name ="questionTitle" required #questionTitle="ngModel" placeholder="Question Title" type="text"><br>
+                </mat-form-field>
+                <mat-form-field class="example-form-field">
+                <label for="optionCount">Enter the nuber of options</label>
+                <input matInput ngModel name="optionCount" #optionCount="ngModel" required type="number" min="2" >
+                <mat-hint align="start"><strong>Minimum 2</strong> </mat-hint>
+                </mat-form-field>
+                <div *ngIf="optionCount.value > 0">
+                    <label for="optionCount">Enter the options(Tick for correct answer</label>
+                    <div *ngFor="let item of arrayOne(optionCount.value); let i = index;">
+                        <mat-form-field class="example-form-field">
+                        <input matInput required ngModel name ="optionValue[{{i}}]" class="form-control" placeholder="Option{{i}}" #optionValue="ngModel" type="text">
+                        </mat-form-field>
+                        <mat-checkbox required ngModel name ="optionRight[{{i}}]" #optionRight="ngModel">Correct Answer</mat-checkbox>
+                    </div>
+                </div>
+                <div *ngIf="optionCount.value > 0">
+                    <mat-form-field class="example-form-field">
+                    <input matInput ngModel name="explanation" #explanation="ngModel" placeholder="Explanation" type="text" class="form-control">
+                    <mat-hint align="start"><strong>Enter a valid explanation</strong> </mat-hint>
+                    </mat-form-field>
+                </div>
+                <button class="btn btn-primary" [disabled]="questionTitle.invalid || optionCount.invalid">Add Question</button>
+                </form>
+            </div>
+            <div *ngIf="selectedQuestionType === 'value'">
+                <form #fvalue="ngForm" (ngSubmit)="submitValueQuestion(fvalue.value)">
+                <mat-form-field class="example-form-field">
+                <input matInput required ngModel name ="questionTitle"  #questionTitle="ngModel" placeholder="Question Title" type="text"><br>
+                </mat-form-field>
+                <mat-form-field class="example-form-field">
+                <input matInput required ngModel name ="questionAnswer" #questionAnswer="ngModel" placeholder="Answer" type="text"><br>
+                </mat-form-field>
+                <mat-form-field class="example-form-field">
+                    <input matInput ngModel name="explanation" #explanation="ngModel" placeholder="Explanation" type="text" class="form-control">
+                    <mat-hint align="start"><strong>Enter a valid explanation</strong> </mat-hint>
+                </mat-form-field>
+                <button class="btn btn-primary" [disabled]="fvalue.invalid">Add Question</button>
+                </form>
+            </div>
+            <div *ngIf="selectedQuestionType === 'nested'">
+                <form #fnested="ngForm" (ngSubmit)="submitNestedQuestion(fnested.value)">
+                <label for="nestingLevel">Enter the level of nesting</label>
+                <input required ngModel name ="nestingLevel" required class="form-control" #nestingLevel="ngModel" type="number" min="2">
+                <div *ngFor="let level of arrayOne(nestingLevel.value-1+1); let i = index;">
+                        <div>
+                            <label for="questionType">Select type of Question</label>
+                            <select required ngModel [name] ="'questionType'+i" #questionType="ngModel" required class="custom-select" (change)="nestedQuestionChangeHandler($event,i)">
+                                <option value="select">Select Type</option>
+                                <option value="mcq">MCQ</option>
+                                <option value="value">Value-Based</option>
+                            </select>
+                        </div>
+                        <div *ngIf="nestedQuestionType[i] === 'mcq'">
+                            <br>
+                            <label for="questionTitle">Enter the {{i+1}} question</label>
+                            <input required ngModel [name] ="'questionTitle'+i" required #questionTitle="ngModel" type="text"><br>
+                            <label for="optionCount">Enter the no. of options (Min 2)</label>
+                            <input required required ngModel [name]="'optionCount'+i" #optionCount="ngModel" type="number" min="2" >
+                            <div *ngIf="optionCount.value > 0">
+                                <label for="optionCount">Enter the options</label>
+                                <div *ngFor="let item of arrayOne(optionCount.value); let j = index;">
+                                    <input required ngModel name ="optionValue[{{i}}][{{j}}]" class="form-control" #optionValue="ngModel" type="text">
+                                    <input ngModel name ="optionRight[{{i}}][{{j}}]" #optionRight="ngModel" type="checkbox">Correct Answer
+                                </div>
+                            </div>
+                            <div *ngIf="optionCount.value > 0">
+                                    <label for="explanation">Enter a valid explanation</label>
+                                    <input ngModel [name]="'explanation'+i" #explanation="ngModel" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div *ngIf="nestedQuestionType[i] === 'value'">
+                            <label for="questionTitle">Enter the {{i+1}} question</label>
+                            <input ngModel [name] = "'questionTitle'+i" required class="form-control" #questionTitle="ngModel" type="text"><br>
+                            <label for="questionAnswer">Enter the value</label>
+                            <input ngModel [name] ="'questionAnswer'+i" required class="form-control" #questionAnswer="ngModel" type="text"><br>
+                            <label for="explanation">Enter a valid explanation</label>
+                            <input ngModel [name]="'explanation'+i" #explanation="ngModel" type="text" class="form-control">    
+                        </div>
+                </div>
+                <button class="btn btn-primary" [disabled]="fnested.invalid">Add Nested Question</button>      
+                </form>
+            </div><br>
+        </div>
+        <button class="btn btn-primary" *ngIf="questions.length > 0" [disabled]="f.invalid">Submit Quiz</button>&nbsp;&nbsp;
+    </div>
+</form>
+<!-- Preview -->
+<div class="example-form" *ngIf="questions.length > 0">
+        <div *ngFor="let q of questions" class="form-group" value ="q.id" >
+                <app-question [q]=q (delQuestion)="deleteQuestion($event)">
+                </app-question>
+        </div>
+</div>
