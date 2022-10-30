@@ -1,0 +1,45 @@
+.fab-container {
+    position: fixed;
+    bottom: 65px;
+    right: 45px;
+    z-index: 100;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+} 
+.pointer{
+    cursor: pointer;
+}
+.example-spacer {
+    flex: 1 1 auto;
+}
+.example-icon {
+    padding: 0 24px;
+    color: white;
+}
+.cols{
+    color: white;
+}
+mat-form-field {
+    width: 95%;
+    margin-left: 20px;
+}
+.example-chip-list {
+    width: 95%;
+}
+.mat-elevation-z5{
+    margin: 15px;
+}
+.fa{
+    float: right;
+}
+.summary{
+    width: 70%;
+}
+.trending{
+    width: 30%;
+}
+.example-tab-icon {
+    margin-right: 8px;
+}
+  
