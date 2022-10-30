@@ -1,0 +1,30 @@
+<!-- <mat-toolbar color="primary">
+    <mat-toolbar-row>
+      <span class="title">Quiz Application</span>
+      <span class="example-spacer"></span>
+      <a [routerLink]="['/']">
+        <mat-icon class="example-icon">home</mat-icon>
+      </a>
+      <a [routerLink]="['/login']">
+        <mat-icon class="example-icon">power_settings_new</mat-icon>
+      </a>
+      <a [routerLink]="['/profile']">
+        <mat-icon class="example-icon">account_circle</mat-icon>
+      </a>
+    </mat-toolbar-row>
+</mat-toolbar-->
+<mat-sidenav-container class="example-container">
+    <mat-sidenav #sidenav class="example-sidenav">
+      <div class="profile-container">
+        <i class="material-icons md-48" (click)="sidenav.toggle()">account_circle</i><br>
+        <span class="username">Username</span>
+      </div>
+      <br>
+      <div class="score-container">
+        <span>My Scores</span>
+      </div>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <p><button mat-button (click)="sidenav.toggle()"><mat-icon>menu</mat-icon></button></p>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
