@@ -1,0 +1,39 @@
+<div *ngIf="q.questionTypeId === 1">
+  <mat-card>
+    <mat-card-subtitle>
+      <label for="mcq">{{q.name}}</label>
+      <button (click)="deleteQuestion(q)" mat-mini-fab color="warn">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </mat-card-subtitle>
+    <mat-card-content>
+      <div *ngFor="let option of q.options; let i = index">
+        <input ngModel name="question[{{q.id}}]" #question = "ngModel" [value]="option.name" type="radio" >
+          {{option.name}}
+      </div>
+    </mat-card-content>
+    </mat-card>
+</div>
+<div *ngIf="q.questionTypeId === 2">
+    <mat-card>
+      <mat-card-subtitle>
+        <label for="value">{{q.name}}</label>
+        <button (click)="deleteQuestion(q)" mat-mini-fab color="warn">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-card-subtitle>
+      <mat-card-content>
+      <div>
+        <input ngModel name = "question[{{q.id}}]" #value = "ngModel" type="text" class="form-control">
+      </div>
+      </mat-card-content>
+    </mat-card>
+</div>
+<div *ngIf="q.hasNext">
+  <ul>
+    <li>
+    <app-question [q]=q.nextQuestion>
+    </app-question>
+    </li>
+  </ul>
+</div>
